@@ -1,6 +1,10 @@
 package event
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/upper/db/v4"
+)
 
 type Repository interface {
 	FindAll() ([]Event, error)
@@ -10,21 +14,19 @@ type Repository interface {
 const EventsCount int64 = 10
 
 type repository struct {
-	// Some internal data
+	session db.Session // add Session field
 }
 
-func NewRepository() Repository {
-	return &repository{}
+func NewRepository(sess db.Session) Repository {
+	return &repository{session: sess}
 }
 
 func (r *repository) FindAll() ([]Event, error) {
-	events := make([]Event, EventsCount)
-	for i := int64(0); i < EventsCount; i++ {
-		events[i] = Event{
-			Id:   i + 1,
-			Name: fmt.Sprintf("Event #%d", i+1),
-		}
-	}
+	var events []Event
+	// eventsCol := r.session.Collection("event")
+
+	// res := eventsCol.Find()
+	// err := res.OrderBy("-date_time", "-name").All(&events)
 	return events, nil
 }
 

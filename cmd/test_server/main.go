@@ -56,7 +56,7 @@ func main() {
 	defer sess.Close()
 
 	// Event
-	eventRepository := event.NewRepository()
+	eventRepository := event.NewRepository(sess) // pass the session object
 	eventService := event.NewService(&eventRepository)
 	eventController := controllers.NewEventController(&eventService)
 
