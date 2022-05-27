@@ -14,20 +14,20 @@ type Repository interface {
 const EventsCount int64 = 10
 
 type repository struct {
-	session db.Session // add Session field
+	collection db.Collection // add Collection field
 }
 
-func NewRepository(sess db.Session) Repository {
-	return &repository{session: sess}
+func NewRepository(col db.Collection) Repository {
+	return &repository{collection: col}
 }
 
 func (r *repository) FindAll() ([]Event, error) {
 	var events []Event
-	// eventsCol := r.session.Collection("event")
+	eventsCol := r.collection
 
-	// res := eventsCol.Find()
-	// err := res.OrderBy("-date_time", "-name").All(&events)
-	return events, nil
+	res := eventsCol.Find()
+	err := res.OrderBy("-date_time", "-name").All(&events)
+	return events, err
 }
 
 func (r *repository) FindOne(id int64) (*Event, error) {
