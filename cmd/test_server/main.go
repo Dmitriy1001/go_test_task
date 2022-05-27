@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"runtime/debug"
@@ -11,6 +12,7 @@ import (
 	"github.com/test_server/internal/domain/event"
 	"github.com/test_server/internal/infra/http"
 	"github.com/test_server/internal/infra/http/controllers"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 // @title                       Test Server
@@ -40,13 +42,26 @@ func main() {
 		fmt.Printf("Sent cancel to all threads...")
 	}()
 
+	// db connection
+	settings := postgresql.ConnectionURL{
+		Database: `training`,
+		Host:     `localhost:5432`,
+		User:     `postgres`,
+		Password: `Hotdog_10`,
+	}
+	sess, err := postgresql.Open(settings)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer sess.Close()
+
 	// Event
 	eventRepository := event.NewRepository()
 	eventService := event.NewService(&eventRepository)
 	eventController := controllers.NewEventController(&eventService)
 
 	// HTTP Server
-	err := http.Server(
+	err = http.Server(
 		ctx,
 		http.Router(
 			eventController,
