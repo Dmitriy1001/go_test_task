@@ -45,5 +45,9 @@ func AddEventRoutes(router *chi.Router, eventController *controllers.EventContro
 			"/{id}",
 			eventController.FindOne(),
 		)
+		apiRouter.Post(
+			"/",
+			eventController.Create(),
+		)
 	})
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -16,6 +17,31 @@ type EventController struct {
 func NewEventController(s *event.Service) *EventController {
 	return &EventController{
 		service: s,
+	}
+}
+
+func (c *EventController) Create() http.HandlerFunc {
+	var eventData map[string]string
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := json.NewDecoder(r.Body).Decode(&eventData)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		err = (*c.service).Create(eventData)
+		if err != nil {
+			fmt.Printf("EventController.Create(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.Create(): %s", err)
+			}
+			return
+		}
+
+		err = success(w, 201)
+		if err != nil {
+			fmt.Printf("EventController.Create(): %s", err)
+		}
 	}
 }
 
