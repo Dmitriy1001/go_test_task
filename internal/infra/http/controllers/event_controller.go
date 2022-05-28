@@ -126,3 +126,31 @@ func (c *EventController) Update() http.HandlerFunc {
 		}
 	}
 }
+
+func (c *EventController) Delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		if err != nil {
+			fmt.Printf("EventController.FindOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.FindOne(): %s", err)
+			}
+			return
+		}
+		err = (*c.service).Delete(id)
+		if err != nil {
+			fmt.Printf("EventController.FindOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.FindOne(): %s", err)
+			}
+			return
+		}
+
+		err = success(w, 204)
+		if err != nil {
+			fmt.Printf("EventController.FindOne(): %s", err)
+		}
+	}
+}

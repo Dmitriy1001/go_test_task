@@ -12,6 +12,7 @@ type Repository interface {
 	FindAll() ([]Event, error)
 	FindOne(id int64) (*Event, error)
 	Update(id int64, eventData map[string]string) error
+	Delete(id int64) error
 }
 
 type repository struct {
@@ -69,5 +70,12 @@ func (r *repository) Update(id int64, eventData map[string]string) error {
 
 	res := r.eventCollection.Find(id)
 	err := res.Update(event)
+	return err
+}
+
+func (r *repository) Delete(id int64) error {
+	res := r.eventCollection.Find(id)
+	err := res.One(&event)
+	err = res.Delete()
 	return err
 }

@@ -20,7 +20,13 @@
 
 `http://localhost:8081/v1/events{id}`
 
+## Delete Event (by ID)
+
+`http://localhost:8081/v1/events{id}`
+
 ---
+
+
 ### Create table query(postgres)
 #
 	CREATE TABLE IF NOT EXISTS event

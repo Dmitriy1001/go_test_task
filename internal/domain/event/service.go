@@ -5,6 +5,7 @@ type Service interface {
 	FindAll() ([]Event, error)
 	FindOne(id int64) (*Event, error)
 	Update(id int64, eventData map[string]string) error
+	Delete(id int64) error
 }
 
 type service struct {
@@ -31,4 +32,8 @@ func (s *service) FindOne(id int64) (*Event, error) {
 
 func (s *service) Update(id int64, eventData map[string]string) error {
 	return (*s.repo).Update(id, eventData)
+}
+
+func (s *service) Delete(id int64) error {
+	return (*s.repo).Delete(id)
 }

@@ -53,5 +53,9 @@ func AddEventRoutes(router *chi.Router, eventController *controllers.EventContro
 			"/{id}",
 			eventController.Update(),
 		)
+		apiRouter.Delete(
+			"/{id}",
+			eventController.Delete(),
+		)
 	})
 }
