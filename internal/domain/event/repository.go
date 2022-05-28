@@ -2,7 +2,6 @@ package event
 
 import (
 	"errors"
-	"strconv"
 	"strings"
 
 	"github.com/upper/db/v4"
@@ -29,13 +28,7 @@ var (
 )
 
 func (r *repository) Create(eventData map[string]string) error {
-	event.Name = eventData["name"]
-	event.Image = eventData["image"]
-	event.Description = eventData["description"]
-	event.Gallery = strings.Split(eventData["gallery"], ", ")
-	event.Latitude, _ = strconv.ParseFloat(eventData["latitude"], 64)
-	event.Longitude, _ = strconv.ParseFloat(eventData["longitude"], 64)
-	event.DateTime = eventData["date_time"]
+	event.setValueFromMap(eventData)
 
 	eventExists, _ := r.eventCollection.Find().And(
 		"name = ? AND latitude = ? AND Longitude = ? AND DATE(date_time) = ?",
@@ -63,13 +56,7 @@ func (r *repository) FindOne(id int64) (*Event, error) {
 }
 
 func (r *repository) Update(id int64, eventData map[string]string) error {
-	event.Name = eventData["name"]
-	event.Image = eventData["image"]
-	event.Description = eventData["description"]
-	event.Gallery = strings.Split(eventData["gallery"], ", ")
-	event.Latitude, _ = strconv.ParseFloat(eventData["latitude"], 64)
-	event.Longitude, _ = strconv.ParseFloat(eventData["longitude"], 64)
-	event.DateTime = eventData["date_time"]
+	event.setValueFromMap(eventData)
 
 	eventExists, _ := r.eventCollection.Find().And(
 		"id != ? AND name = ? AND latitude = ? AND Longitude = ? AND DATE(date_time) = ?",
