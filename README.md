@@ -42,6 +42,8 @@
 		CONSTRAINT event_pkey PRIMARY KEY (id)
 	)
 #
+There is also a db backup file test_task_db.backup in the root folder
+* https://www.pgadmin.org/docs/pgadmin4/development/restore_dialog.html (instructions for pgadmin)
 
 ### It is necessary to fill in the fields with the settings variable in main.go
 #
