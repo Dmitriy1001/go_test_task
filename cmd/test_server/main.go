@@ -44,10 +44,10 @@ func main() {
 
 	// db connection
 	settings := postgresql.ConnectionURL{
-		Database: `training`,
-		Host:     `localhost:5432`,
-		User:     `postgres`,
-		Password: `Hotdog_10`,
+		Database: ``,
+		Host:     ``,
+		User:     ``,
+		Password: ``,
 	}
 	sess, err := postgresql.Open(settings)
 	if err != nil {
