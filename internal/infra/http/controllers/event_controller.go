@@ -21,8 +21,8 @@ func NewEventController(s *event.Service) *EventController {
 }
 
 func (c *EventController) Create() http.HandlerFunc {
-	var eventData map[string]string
 	return func(w http.ResponseWriter, r *http.Request) {
+		var eventData map[string]string
 		err := json.NewDecoder(r.Body).Decode(&eventData)
 		if err != nil {
 			fmt.Println(err)
@@ -88,6 +88,41 @@ func (c *EventController) FindOne() http.HandlerFunc {
 		err = success(w, event)
 		if err != nil {
 			fmt.Printf("EventController.FindOne(): %s", err)
+		}
+	}
+}
+
+func (c *EventController) Update() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
+		if err != nil {
+			fmt.Printf("EventController.FindOne(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.FindOne(): %s", err)
+			}
+			return
+		}
+
+		var eventData map[string]string
+		err = json.NewDecoder(r.Body).Decode(&eventData)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		err = (*c.service).Update(id, eventData)
+		if err != nil {
+			fmt.Printf("EventController.Create(): %s", err)
+			err = internalServerError(w, err)
+			if err != nil {
+				fmt.Printf("EventController.Create(): %s", err)
+			}
+			return
+		}
+
+		err = success(w, 204)
+		if err != nil {
+			fmt.Printf("EventController.Create(): %s", err)
 		}
 	}
 }

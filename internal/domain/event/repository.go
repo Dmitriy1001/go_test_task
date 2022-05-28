@@ -9,9 +9,10 @@ import (
 )
 
 type Repository interface {
-	Create(map[string]string) error
+	Create(eventData map[string]string) error
 	FindAll() ([]Event, error)
 	FindOne(id int64) (*Event, error)
+	Update(id int64, eventData map[string]string) error
 }
 
 type repository struct {
@@ -59,4 +60,27 @@ func (r *repository) FindOne(id int64) (*Event, error) {
 	res := r.eventCollection.Find(id)
 	err := res.One(&event)
 	return &event, err
+}
+
+func (r *repository) Update(id int64, eventData map[string]string) error {
+	event.Name = eventData["name"]
+	event.Image = eventData["image"]
+	event.Description = eventData["description"]
+	event.Gallery = strings.Split(eventData["gallery"], ", ")
+	event.Latitude, _ = strconv.ParseFloat(eventData["latitude"], 64)
+	event.Longitude, _ = strconv.ParseFloat(eventData["longitude"], 64)
+	event.DateTime = eventData["date_time"]
+
+	eventExists, _ := r.eventCollection.Find().And(
+		"id != ? AND name = ? AND latitude = ? AND Longitude = ? AND DATE(date_time) = ?",
+		id, event.Name, event.Latitude, event.Longitude, strings.Split(event.DateTime, " ")[0],
+	).Exists()
+	if eventExists {
+		err := errors.New("An event with a different id, but with the same name, coords and date, already exists")
+		return err
+	}
+
+	res := r.eventCollection.Find(id)
+	err := res.Update(event)
+	return err
 }
