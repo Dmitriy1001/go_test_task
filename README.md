@@ -18,16 +18,16 @@
 
 ## Update Event (by ID)
 
-`http://localhost:8081/v1/events{id}`
+`http://localhost:8081/v1/events/{id}`
 
 ## Delete Event (by ID)
 
-`http://localhost:8081/v1/events{id}`
+`http://localhost:8081/v1/events/{id}`
 
 ---
 
 
-### Create table query(postgres)
+## Create table query(postgres)
 #
 	CREATE TABLE IF NOT EXISTS event
 	(
@@ -42,10 +42,11 @@
 		CONSTRAINT event_pkey PRIMARY KEY (id)
 	)
 #
-There is also a db backup file test_task_db.backup in the root folder
-* https://www.pgadmin.org/docs/pgadmin4/development/restore_dialog.html (instructions for pgadmin)
+There is also a db backup file "test_task_db.backup" in the root folder
+* https://www.pgadmin.org/docs/pgadmin4/development/restore_dialog.html (for pgadmin)
+* https://www.postgresql.org/docs/14/backup.html (for psql)
 
-### It is necessary to fill in the fields with the settings variable in main.go
+## It is necessary to fill in the fields with the settings variable in main.go
 #
     settings := postgresql.ConnectionURL{
 		Database: ``,
@@ -55,7 +56,7 @@ There is also a db backup file test_task_db.backup in the root folder
 	}
 #
 
-### POST request example(JSON)
+## POST request example(JSON)
 #
     {
         "name": "go conference",
